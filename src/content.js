@@ -11,7 +11,13 @@
   const STYLE_ID = "tlcgpt-work-theme-style";
   const NAV_ID = "tlcgpt-work-nav";
   const STYLE_PATH = "src/teams.css";
+  const INJECTED_SELECTORS = [
+    ".tlcgpt-header-search",
+    ".tlcgpt-message-meta",
+    ".tlcgpt-composer-toolbar"
+  ];
   const DECORATION_CLASSES = [
+    "tlcgpt-app-header",
     "tlcgpt-main-surface",
     "tlcgpt-message-card",
     "tlcgpt-message-content",
@@ -122,12 +128,88 @@
     document.getElementById(NAV_ID)?.remove();
   }
 
+  function isThemeElement(element) {
+    return Boolean(element?.closest?.(`#${NAV_ID}`));
+  }
+
   function addClasses(element, classNames) {
-    if (!element || element.closest?.(`#${NAV_ID}`)) {
+    if (!element || isThemeElement(element)) {
       return;
     }
 
     element.classList.add(...classNames);
+  }
+
+  function createTextElement(tagName, className, text) {
+    const element = document.createElement(tagName);
+    element.className = className;
+    element.textContent = text;
+    return element;
+  }
+
+  function findPrimaryHeader() {
+    const headers = Array.from(
+      document.querySelectorAll('header, [role="banner"]')
+    );
+
+    return headers.find((header) => !isThemeElement(header));
+  }
+
+  function getChatTitle(header) {
+    const documentTitle = document.title
+      .replace(/\s*[-|]\s*ChatGPT.*$/i, "")
+      .replace(/^ChatGPT\s*[-|]\s*/i, "")
+      .trim();
+
+    if (documentTitle && !/^chatgpt$/i.test(documentTitle)) {
+      return documentTitle;
+    }
+
+    const blockedWords = /share|search|menu|profile|new chat|\u5171\u6709|\u691c\u7d22|\u30e1\u30cb\u30e5\u30fc|\u65b0\u3057\u3044/i;
+    const candidates = Array.from(
+      header.querySelectorAll('h1, [data-testid*="title"], [aria-label]')
+    );
+
+    for (const candidate of candidates) {
+      const text = (candidate.textContent || candidate.getAttribute("aria-label") || "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      if (text && text.length <= 64 && !blockedWords.test(text)) {
+        return text;
+      }
+    }
+
+    return "Current chat";
+  }
+
+  function ensureHeaderDecoration() {
+    const header = findPrimaryHeader();
+
+    if (!header) {
+      return;
+    }
+
+    addClasses(header, ["tlcgpt-app-header"]);
+    header.dataset.tlcgptChatTitle = getChatTitle(header);
+
+    if (header.querySelector(".tlcgpt-header-search")) {
+      return;
+    }
+
+    const search = document.createElement("div");
+    search.className = "tlcgpt-header-search";
+    search.setAttribute("aria-hidden", "true");
+
+    const icon = createTextElement("span", "tlcgpt-header-search__icon", "/");
+    const label = createTextElement(
+      "span",
+      "tlcgpt-header-search__label",
+      "Search work chats"
+    );
+
+    search.append(icon, label);
+    header.append(search);
   }
 
   function decorateMainSurface() {
@@ -141,7 +223,7 @@
       node.querySelector(
         [
           '[class*="bg-token-message"]',
-          '[class*="bg-"]',
+          '[class*="bg-token-user"]',
           '[class*="message-surface"]',
           '[class*="whitespace-pre-wrap"]',
           '[class*="break-words"]'
@@ -150,6 +232,36 @@
       node.firstElementChild ||
       node
     );
+  }
+
+  function ensureMessageMeta(cardTarget, role) {
+    if (!cardTarget || cardTarget.querySelector(":scope > .tlcgpt-message-meta")) {
+      return;
+    }
+
+    const isUser = role === "user";
+    const meta = document.createElement("div");
+    meta.className = "tlcgpt-message-meta";
+    meta.setAttribute("aria-hidden", "true");
+
+    const avatar = createTextElement(
+      "span",
+      "tlcgpt-message-avatar",
+      isUser ? "Y" : "AI"
+    );
+    const label = createTextElement(
+      "span",
+      "tlcgpt-message-label",
+      isUser ? "You" : "Assistant"
+    );
+    const time = createTextElement(
+      "span",
+      "tlcgpt-message-time",
+      isUser ? "09:42" : "09:41"
+    );
+
+    meta.append(avatar, label, time);
+    cardTarget.prepend(meta);
   }
 
   function decorateMessages() {
@@ -171,6 +283,8 @@
       ]);
       node.dataset.tlcgptMessageRole = role;
       cardTarget.dataset.tlcgptMessageRole = role;
+
+      ensureMessageMeta(cardTarget, role);
     });
   }
 
@@ -198,9 +312,14 @@
 
   function findComposerShell(input) {
     const form = input.closest("form");
+
+    if (form) {
+      return form;
+    }
+
     let current = input.parentElement;
 
-    while (current && current !== form && current !== document.body) {
+    while (current && current !== document.body) {
       const hasInput = current.querySelector(
         'textarea, [contenteditable="true"], [role="textbox"]'
       );
@@ -222,6 +341,34 @@
       : form || input.parentElement;
   }
 
+  function ensureComposerToolbar(shell) {
+    if (!shell || shell.querySelector(".tlcgpt-composer-toolbar")) {
+      return;
+    }
+
+    const toolbar = document.createElement("div");
+    toolbar.className = "tlcgpt-composer-toolbar";
+    toolbar.setAttribute("aria-hidden", "true");
+
+    [
+      ["+", ""],
+      ["A", ""],
+      [":)", ""],
+      ["Attach", ""],
+      ["Send", "tlcgpt-composer-tool--send"]
+    ].forEach(([label, modifier]) => {
+      const tool = createTextElement(
+        "span",
+        `tlcgpt-composer-tool ${modifier}`.trim(),
+        label
+      );
+      toolbar.append(tool);
+    });
+
+    shell.dataset.tlcgptComposer = "true";
+    shell.append(toolbar);
+  }
+
   function decorateComposer() {
     document
       .querySelectorAll('textarea, [contenteditable="true"], [role="textbox"]')
@@ -230,8 +377,11 @@
           return;
         }
 
+        const shell = findComposerShell(input);
+
         addClasses(input, ["tlcgpt-input-control"]);
-        addClasses(findComposerShell(input), ["tlcgpt-input-shell"]);
+        addClasses(shell, ["tlcgpt-input-shell"]);
+        ensureComposerToolbar(shell);
       });
   }
 
@@ -241,6 +391,7 @@
     }
 
     ensureNav();
+    ensureHeaderDecoration();
     decorateMainSurface();
     decorateMessages();
     decorateComposer();
@@ -264,10 +415,16 @@
     }
 
     document
+      .querySelectorAll(INJECTED_SELECTORS.join(","))
+      .forEach((element) => element.remove());
+
+    document
       .querySelectorAll(DECORATION_CLASSES.map((name) => `.${name}`).join(","))
       .forEach((element) => {
         element.classList.remove(...DECORATION_CLASSES);
         delete element.dataset.tlcgptMessageRole;
+        delete element.dataset.tlcgptChatTitle;
+        delete element.dataset.tlcgptComposer;
       });
   }
 

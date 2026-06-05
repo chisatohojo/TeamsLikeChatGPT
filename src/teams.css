@@ -9,7 +9,9 @@ html.tlcgpt-work-theme {
   --tlcgpt-accent: #5b5fc7;
   --tlcgpt-accent-strong: #494ca2;
   --tlcgpt-accent-soft: #efeffd;
+  --tlcgpt-user-surface: #f0f0ff;
   --tlcgpt-shadow: 0 14px 36px rgba(31, 31, 51, 0.12);
+  --tlcgpt-message-width: 900px;
   background: var(--tlcgpt-bg) !important;
   overflow-x: clip;
 }
@@ -31,7 +33,7 @@ html.tlcgpt-work-theme .tlcgpt-work-nav {
   gap: 18px;
   box-sizing: border-box;
   padding: 12px 8px;
-  background: #f8f8fc;
+  background: #f7f7fb;
   border-right: 1px solid var(--tlcgpt-border);
   box-shadow: 2px 0 14px rgba(31, 31, 51, 0.08);
   color: var(--tlcgpt-text-muted);
@@ -44,7 +46,7 @@ html.tlcgpt-work-theme .tlcgpt-work-nav__brand {
   height: 40px;
   place-items: center;
   border-radius: 8px;
-  background: var(--tlcgpt-accent);
+  background: linear-gradient(135deg, #5b5fc7, #7377d8);
   color: #ffffff;
   font-size: 20px;
   font-weight: 700;
@@ -59,6 +61,7 @@ html.tlcgpt-work-theme .tlcgpt-work-nav__list {
 }
 
 html.tlcgpt-work-theme .tlcgpt-work-nav__item {
+  position: relative;
   display: grid;
   width: 56px;
   min-height: 54px;
@@ -76,14 +79,13 @@ html.tlcgpt-work-theme .tlcgpt-work-nav__item {
 
 html.tlcgpt-work-theme .tlcgpt-work-nav__item:hover,
 html.tlcgpt-work-theme .tlcgpt-work-nav__item:focus-visible {
-  background: var(--tlcgpt-accent-soft);
+  background: rgba(91, 95, 199, 0.09);
   color: var(--tlcgpt-accent-strong);
   outline: none;
 }
 
 html.tlcgpt-work-theme .tlcgpt-work-nav__item.is-active {
-  position: relative;
-  background: var(--tlcgpt-accent-soft);
+  background: rgba(91, 95, 199, 0.13);
   color: var(--tlcgpt-accent-strong);
 }
 
@@ -118,6 +120,62 @@ html.tlcgpt-work-theme .tlcgpt-work-nav__label {
   white-space: nowrap;
 }
 
+html.tlcgpt-work-theme .tlcgpt-app-header {
+  min-height: 54px;
+  border-bottom: 1px solid var(--tlcgpt-border) !important;
+  background: var(--tlcgpt-surface) !important;
+  box-shadow: none !important;
+  isolation: isolate;
+  position: relative;
+}
+
+html.tlcgpt-work-theme .tlcgpt-app-header h1,
+html.tlcgpt-work-theme .tlcgpt-app-header [data-testid*="title"] {
+  color: var(--tlcgpt-text) !important;
+  font-weight: 650 !important;
+}
+
+html.tlcgpt-work-theme .tlcgpt-header-search {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  display: flex;
+  width: min(360px, 34vw);
+  height: 32px;
+  align-items: center;
+  gap: 9px;
+  box-sizing: border-box;
+  padding: 0 13px;
+  border: 1px solid var(--tlcgpt-border);
+  border-radius: 8px;
+  background: #fbfbfd;
+  color: var(--tlcgpt-text-muted);
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
+  line-height: 1;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+html.tlcgpt-work-theme .tlcgpt-header-search__icon {
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border-radius: 5px;
+  background: var(--tlcgpt-accent-soft);
+  color: var(--tlcgpt-accent-strong);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+html.tlcgpt-work-theme .tlcgpt-header-search__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 html.tlcgpt-work-theme .tlcgpt-main-surface,
 html.tlcgpt-work-theme main,
 html.tlcgpt-work-theme [role="main"] {
@@ -135,31 +193,72 @@ html.tlcgpt-work-theme .tlcgpt-message-content {
 }
 
 html.tlcgpt-work-theme .tlcgpt-message-card {
+  position: relative;
   display: block !important;
   width: auto !important;
-  max-width: min(820px, calc(100% - 40px)) !important;
+  max-width: min(var(--tlcgpt-message-width), calc(100% - 40px)) !important;
   box-sizing: border-box;
-  margin: 10px auto !important;
-  padding: 14px 16px !important;
+  margin: 12px auto !important;
+  padding: 13px 16px 15px !important;
   border: 1px solid var(--tlcgpt-border) !important;
-  border-radius: 16px !important;
+  border-radius: 14px !important;
   background: var(--tlcgpt-surface) !important;
-  box-shadow: 0 2px 10px rgba(31, 31, 51, 0.05) !important;
+  box-shadow: 0 3px 14px rgba(31, 31, 51, 0.07) !important;
 }
 
 html.tlcgpt-work-theme .tlcgpt-message-card.tlcgpt-message-user {
   width: fit-content !important;
-  max-width: min(620px, calc(100% - 40px)) !important;
+  max-width: min(660px, calc(100% - 40px)) !important;
   min-width: min(180px, calc(100% - 40px)) !important;
-  margin-right: max(20px, calc((100% - 820px) / 2)) !important;
+  margin-right: max(20px, calc((100% - var(--tlcgpt-message-width)) / 2)) !important;
   margin-left: auto !important;
   border-color: #d9d8f4 !important;
-  background: var(--tlcgpt-accent-soft) !important;
+  background: var(--tlcgpt-user-surface) !important;
 }
 
 html.tlcgpt-work-theme .tlcgpt-message-card.tlcgpt-message-assistant {
   margin-right: auto !important;
-  margin-left: max(20px, calc((100% - 820px) / 2)) !important;
+  margin-left: max(20px, calc((100% - var(--tlcgpt-message-width)) / 2)) !important;
+}
+
+html.tlcgpt-work-theme .tlcgpt-message-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  margin: 0 0 8px;
+  color: var(--tlcgpt-text-muted);
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+html.tlcgpt-work-theme .tlcgpt-message-avatar {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  place-items: center;
+  border-radius: 50%;
+  background: #e7e8fb;
+  color: var(--tlcgpt-accent-strong);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+html.tlcgpt-work-theme .tlcgpt-message-label {
+  color: var(--tlcgpt-text);
+  font-weight: 650;
+}
+
+html.tlcgpt-work-theme .tlcgpt-message-time {
+  color: #8a8998;
+  font-size: 11px;
+}
+
+html.tlcgpt-work-theme .tlcgpt-message-user .tlcgpt-message-avatar {
+  background: var(--tlcgpt-accent);
+  color: #ffffff;
 }
 
 html.tlcgpt-work-theme .tlcgpt-message-card pre,
@@ -172,27 +271,63 @@ html.tlcgpt-work-theme .tlcgpt-message-card a {
 }
 
 html.tlcgpt-work-theme .tlcgpt-input-shell {
+  width: min(var(--tlcgpt-message-width), calc(100% - 32px)) !important;
   box-sizing: border-box;
+  margin-right: auto !important;
+  margin-left: auto !important;
+  padding: 8px !important;
   border: 1px solid var(--tlcgpt-border-strong) !important;
-  border-radius: 18px !important;
+  border-radius: 16px !important;
   background: var(--tlcgpt-surface) !important;
   box-shadow: var(--tlcgpt-shadow) !important;
 }
 
-html.tlcgpt-work-theme .tlcgpt-input-control,
-html.tlcgpt-work-theme textarea,
-html.tlcgpt-work-theme [role="textbox"],
-html.tlcgpt-work-theme [contenteditable="true"] {
+html.tlcgpt-work-theme .tlcgpt-input-control {
   background: transparent !important;
   color: var(--tlcgpt-text) !important;
   caret-color: var(--tlcgpt-accent) !important;
 }
 
-html.tlcgpt-work-theme .tlcgpt-input-control:focus,
-html.tlcgpt-work-theme textarea:focus,
-html.tlcgpt-work-theme [role="textbox"]:focus,
-html.tlcgpt-work-theme [contenteditable="true"]:focus {
+html.tlcgpt-work-theme .tlcgpt-input-control:focus {
   outline-color: var(--tlcgpt-accent) !important;
+}
+
+html.tlcgpt-work-theme .tlcgpt-composer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  margin-top: 8px;
+  padding: 8px 4px 0;
+  border-top: 1px solid var(--tlcgpt-border);
+  color: var(--tlcgpt-text-muted);
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html.tlcgpt-work-theme .tlcgpt-composer-tool {
+  display: grid;
+  min-width: 30px;
+  height: 28px;
+  place-items: center;
+  box-sizing: border-box;
+  padding: 0 8px;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--tlcgpt-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+html.tlcgpt-work-theme .tlcgpt-composer-tool:first-child {
+  border: 1px solid var(--tlcgpt-border);
+  color: var(--tlcgpt-accent-strong);
+  font-size: 16px;
+}
+
+html.tlcgpt-work-theme .tlcgpt-composer-tool--send {
+  margin-left: auto;
+  background: var(--tlcgpt-accent);
+  color: #ffffff;
 }
 
 html.tlcgpt-work-theme button,
@@ -214,6 +349,12 @@ html.tlcgpt-work-theme [role="button"]:hover {
     display: none !important;
   }
 
+  html.tlcgpt-work-theme .tlcgpt-header-search,
+  html.tlcgpt-work-theme .tlcgpt-message-meta,
+  html.tlcgpt-work-theme .tlcgpt-composer-toolbar {
+    display: none !important;
+  }
+
   html.tlcgpt-work-theme .tlcgpt-message-card,
   html.tlcgpt-work-theme .tlcgpt-message-card.tlcgpt-message-user,
   html.tlcgpt-work-theme .tlcgpt-message-card.tlcgpt-message-assistant {
@@ -221,5 +362,14 @@ html.tlcgpt-work-theme [role="button"]:hover {
     max-width: calc(100% - 24px) !important;
     margin-right: 12px !important;
     margin-left: 12px !important;
+  }
+
+  html.tlcgpt-work-theme .tlcgpt-input-shell {
+    width: auto !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
   }
 }
