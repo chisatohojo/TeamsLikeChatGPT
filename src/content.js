@@ -143,16 +143,15 @@
 
     messageNodes.forEach((node) => {
       const role = node.getAttribute("data-message-author-role");
-      const turn =
-        node.closest(
-          '[data-testid^="conversation-turn-"], article, [role="article"], li'
-        ) || node;
       const roleClass =
         role === "user" ? "tlcgpt-message-user" : "tlcgpt-message-assistant";
 
-      addClasses(turn, ["tlcgpt-message-card", roleClass]);
-      addClasses(node, ["tlcgpt-message-content"]);
-      turn.dataset.tlcgptMessageRole = role;
+      addClasses(node, [
+        "tlcgpt-message-card",
+        "tlcgpt-message-content",
+        roleClass
+      ]);
+      node.dataset.tlcgptMessageRole = role;
     });
   }
 

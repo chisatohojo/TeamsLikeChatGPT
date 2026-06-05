@@ -11,11 +11,13 @@ html.tlcgpt-work-theme {
   --tlcgpt-accent-soft: #efeffd;
   --tlcgpt-shadow: 0 14px 36px rgba(31, 31, 51, 0.12);
   background: var(--tlcgpt-bg) !important;
+  overflow-x: clip;
 }
 
 html.tlcgpt-work-theme body {
   background: var(--tlcgpt-bg) !important;
   color: var(--tlcgpt-text);
+  overflow-x: clip;
 }
 
 html.tlcgpt-work-theme .tlcgpt-work-nav {
@@ -133,7 +135,8 @@ html.tlcgpt-work-theme .tlcgpt-message-content {
 }
 
 html.tlcgpt-work-theme .tlcgpt-message-card {
-  width: min(820px, calc(100% - 40px)) !important;
+  display: block !important;
+  width: auto !important;
   max-width: min(820px, calc(100% - 40px)) !important;
   box-sizing: border-box;
   margin: 10px auto !important;
@@ -146,6 +149,7 @@ html.tlcgpt-work-theme .tlcgpt-message-card {
 
 html.tlcgpt-work-theme .tlcgpt-message-card.tlcgpt-message-user {
   width: fit-content !important;
+  max-width: min(620px, calc(100% - 40px)) !important;
   min-width: min(180px, calc(100% - 40px)) !important;
   margin-right: max(20px, calc((100% - 820px) / 2)) !important;
   margin-left: auto !important;
@@ -203,13 +207,6 @@ html.tlcgpt-work-theme [role="button"] {
 html.tlcgpt-work-theme button:hover,
 html.tlcgpt-work-theme [role="button"]:hover {
   border-color: var(--tlcgpt-border-strong);
-}
-
-@media (min-width: 769px) {
-  html.tlcgpt-work-theme body {
-    box-sizing: border-box;
-    padding-left: 72px !important;
-  }
 }
 
 @media (max-width: 768px) {
