@@ -136,6 +136,22 @@
       .forEach((surface) => addClasses(surface, ["tlcgpt-main-surface"]));
   }
 
+  function findUserMessageCardTarget(node) {
+    return (
+      node.querySelector(
+        [
+          '[class*="bg-token-message"]',
+          '[class*="bg-"]',
+          '[class*="message-surface"]',
+          '[class*="whitespace-pre-wrap"]',
+          '[class*="break-words"]'
+        ].join(",")
+      ) ||
+      node.firstElementChild ||
+      node
+    );
+  }
+
   function decorateMessages() {
     const messageNodes = document.querySelectorAll(
       '[data-message-author-role="user"], [data-message-author-role="assistant"]'
@@ -145,13 +161,16 @@
       const role = node.getAttribute("data-message-author-role");
       const roleClass =
         role === "user" ? "tlcgpt-message-user" : "tlcgpt-message-assistant";
+      const cardTarget =
+        role === "user" ? findUserMessageCardTarget(node) : node;
 
-      addClasses(node, [
+      addClasses(node, ["tlcgpt-message-content"]);
+      addClasses(cardTarget, [
         "tlcgpt-message-card",
-        "tlcgpt-message-content",
         roleClass
       ]);
       node.dataset.tlcgptMessageRole = role;
+      cardTarget.dataset.tlcgptMessageRole = role;
     });
   }
 
@@ -178,12 +197,29 @@
   }
 
   function findComposerShell(input) {
-    return (
-      input.closest(
-        'form, [data-testid*="composer"], [data-testid*="prompt"], [class*="composer"], [class*="prompt"]'
-      ) ||
-      input.parentElement
+    const form = input.closest("form");
+    let current = input.parentElement;
+
+    while (current && current !== form && current !== document.body) {
+      const hasInput = current.querySelector(
+        'textarea, [contenteditable="true"], [role="textbox"]'
+      );
+      const hasControls = current.querySelector('button, [role="button"]');
+
+      if (hasInput && hasControls) {
+        return current;
+      }
+
+      current = current.parentElement;
+    }
+
+    const namedComposer = input.closest(
+      '[data-testid*="composer"], [class*="composer"]'
     );
+
+    return namedComposer && namedComposer !== input
+      ? namedComposer
+      : form || input.parentElement;
   }
 
   function decorateComposer() {

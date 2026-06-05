@@ -171,11 +171,7 @@ html.tlcgpt-work-theme .tlcgpt-message-card a {
   color: var(--tlcgpt-accent-strong) !important;
 }
 
-html.tlcgpt-work-theme .tlcgpt-input-shell,
-html.tlcgpt-work-theme form:has(textarea),
-html.tlcgpt-work-theme form:has([contenteditable="true"]),
-html.tlcgpt-work-theme [data-testid*="composer"],
-html.tlcgpt-work-theme [data-testid*="prompt"] {
+html.tlcgpt-work-theme .tlcgpt-input-shell {
   box-sizing: border-box;
   border: 1px solid var(--tlcgpt-border-strong) !important;
   border-radius: 18px !important;
