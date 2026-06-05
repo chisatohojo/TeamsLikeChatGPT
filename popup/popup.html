@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Work Chat Theme</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main class="popup">
+      <header class="popup__header">
+        <img src="../icons/icon48.png" width="40" height="40" alt="">
+        <div>
+          <h1>Work Chat Theme</h1>
+          <p>Teams-like look for ChatGPT</p>
+        </div>
+      </header>
+
+      <section class="toggle-card" aria-label="Theme toggle">
+        <div>
+          <span class="toggle-card__eyebrow">Theme</span>
+          <strong id="stateLabel">Loading</strong>
+        </div>
+
+        <label class="switch">
+          <input id="themeToggle" type="checkbox" role="switch">
+          <span class="switch__track" aria-hidden="true">
+            <span class="switch__thumb"></span>
+          </span>
+        </label>
+      </section>
+
+      <p class="popup__note">
+        Unofficial theme extension. It is not affiliated with Microsoft, Teams, or OpenAI.
+      </p>
+    </main>
+
+    <script src="../src/storage.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
