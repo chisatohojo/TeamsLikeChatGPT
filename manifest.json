@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Teams-like Work Chat Theme for ChatGPT",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Adds a Teams-like work chat theme to ChatGPT. Unofficial and not affiliated with Microsoft, Teams, or OpenAI.",
   "icons": {
     "16": "icons/icon16.png",
