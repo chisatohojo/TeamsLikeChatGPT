@@ -216,6 +216,12 @@ html.tlcgpt-work-theme .tlcgpt-message-card.tlcgpt-message-user {
   background: var(--tlcgpt-user-surface) !important;
 }
 
+html.tlcgpt-work-theme .tlcgpt-message-user-frame {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
 html.tlcgpt-work-theme .tlcgpt-message-card.tlcgpt-message-assistant {
   margin-right: auto !important;
   margin-left: max(20px, calc((100% - var(--tlcgpt-message-width)) / 2)) !important;

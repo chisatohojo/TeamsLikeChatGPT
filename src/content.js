@@ -23,6 +23,7 @@
     "tlcgpt-message-content",
     "tlcgpt-message-user",
     "tlcgpt-message-assistant",
+    "tlcgpt-message-user-frame",
     "tlcgpt-input-shell",
     "tlcgpt-input-control"
   ];
@@ -264,6 +265,22 @@
     cardTarget.prepend(meta);
   }
 
+  function neutralizeUserMessageFrame(node, cardTarget) {
+    let current = cardTarget === node ? node : cardTarget.parentElement;
+
+    while (current && node.contains(current)) {
+      if (current !== cardTarget) {
+        addClasses(current, ["tlcgpt-message-user-frame"]);
+      }
+
+      if (current === node) {
+        break;
+      }
+
+      current = current.parentElement;
+    }
+  }
+
   function decorateMessages() {
     const messageNodes = document.querySelectorAll(
       '[data-message-author-role="user"], [data-message-author-role="assistant"]'
@@ -283,6 +300,10 @@
       ]);
       node.dataset.tlcgptMessageRole = role;
       cardTarget.dataset.tlcgptMessageRole = role;
+
+      if (role === "user") {
+        neutralizeUserMessageFrame(node, cardTarget);
+      }
 
       ensureMessageMeta(cardTarget, role);
     });
