@@ -110,7 +110,7 @@
     const brand = document.createElement("div");
     brand.className = "tlcgpt-work-nav__brand";
     brand.title = "Work Chat Theme";
-    brand.textContent = "W";
+    brand.textContent = "T";
 
     const list = document.createElement("div");
     list.className = "tlcgpt-work-nav__list";
